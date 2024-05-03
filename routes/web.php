@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +29,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 Route::group(['middleware' => 'auth'], function () {
     Route::get('produk/data', [ProdukController::class, 'data'])->name('produk.data');
     Route::resource('produk', ProdukController::class);
+
+    Route::get('pelanggan/data', [PelangganController::class, 'data'])->name('pelanggan.data');
+    Route::resource('pelanggan', PelangganController::class);
+
 });

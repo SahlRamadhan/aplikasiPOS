@@ -11,12 +11,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group ">
-                        <label for="kode_Produk" class="form-label">Nama Produk</label>
-                        <input type="text" name="kode_Produk" id="kode_Produk" class="form-control" required
-                            autofocus>
-                        <span class="help-block with-errors"></span>
-                    </div>
-                    <div class="form-group ">
                         <label for="nama_produk" class="form-label">Nama Produk</label>
                         <input type="text" name="nama_produk" id="nama_produk" class="form-control" required
                             autofocus>

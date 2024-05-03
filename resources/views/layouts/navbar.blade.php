@@ -47,7 +47,7 @@
              <li class="menu-header">Data Master </li>
              <li class="{{ Request::is('produk') ? 'active' : '' }}"><a class="nav-link" href="{{ route('produk.index') }}"><i
                          class="fas fa-cubes"></i><span>Produk</span></a></li>
-             <li class="{{ Request::is('pelanggan') ? 'active' : '' }}"><a class="nav-link" href=""><i
+             <li class="{{ Request::is('pelanggan') ? 'active' : '' }}"><a class="nav-link" href="{{ route('pelanggan.index') }}"><i
                          class="fas fa-user"></i><span>Pelanggan</span></a></li>
              <li class="menu-header">Transaki </li>
              <li class="{{ Request::is('permintaan') ? 'active' : '' }}"><a class="nav-link" href=""><i

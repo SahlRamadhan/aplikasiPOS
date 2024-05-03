@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Ecommerce Dashboard &mdash; Stisla</title>
 
     <!-- General CSS Files -->
@@ -97,6 +98,9 @@
     <script src="{{ asset('../node_modules/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('../node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('../node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script>
+
+    {{-- swal Alert --}}
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{-- modal --}}
     {{-- <script src="{{ asset('../assets/modules/prism/prism.js') }}"></script> --}}

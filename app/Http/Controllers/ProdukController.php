@@ -17,20 +17,24 @@ class ProdukController extends Controller
 
     public function data()
     {
-        $produk = Produk::orderBy('id_produk', 'desc')->get();
+        $produk = Produk::orderBy('id_produk', 'desc');
 
         return datatables()
             ->of($produk)
             ->addIndexColumn()
             ->addColumn('kode_produk', function ($produk) {
-                return '<span class="label label-success">' . $produk->kode_produk . '</span>';
+                return '<span class="badge badge-success">' . $produk->kode_produk . '</span>';
+            })
+            ->addColumn('harga_jual', function ($produk) {
+                return format_uang($produk->harga_jual);
+            })
+            ->addColumn('stok', function ($produk) {
+                return format_uang($produk->stok);
             })
             ->addColumn('aksi', function ($produk) {
                 return '
-                <div class="btn-group">
-                    <button onclick="editForm(`' . route('produk.update', $produk->id_produk) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
-                    <button onclick="deleteData(`' . route('produk.destroy', $produk->id_produk) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                </div>
+                    <button onclick="editForm(`' . route('produk.update', $produk->id_produk) . '`)" class="btn btn-info"><i class="fa fa-eye"></i></button>
+                    <button onclick="deleteData(`' . route('produk.destroy', $produk->id_produk) . '`)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                 ';
             })
             ->rawColumns(['aksi', 'kode_produk'])
@@ -51,7 +55,7 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $produk = Produk::latest()->first() ?? new Produk();
-        // $request['kode_produk'] = 'P-' . tambah_nol_didepan($produk->id +1,6);
+        $request['kode_produk'] = 'PRD-' . tambah_nol_didepan((int)$produk->id_produk + 1, 6);
 
         $produk = Produk::create($request->all());
 
@@ -63,7 +67,9 @@ class ProdukController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $produk = Produk::find($id);
+
+        return response()->json($produk);
     }
 
     /**
@@ -79,7 +85,10 @@ class ProdukController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $produk = Produk::find($id);
+        $produk->update($request->all());
+
+        return response()->json('Data berhasil disimpan', 200);
     }
 
     /**
@@ -87,6 +96,9 @@ class ProdukController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $produk = Produk::find($id);
+        $produk->delete();
+
+        return response(null, 204);
     }
 }
