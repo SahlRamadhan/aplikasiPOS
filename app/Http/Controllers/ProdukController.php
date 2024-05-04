@@ -55,9 +55,14 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $produk = Produk::latest()->first() ?? new Produk();
-        $request['kode_produk'] = 'PRD-' . tambah_nol_didepan((int)$produk->id_produk + 1, 6);
+        $kode_produk =  $produk ? (int) substr($produk->kode_produk, 5) + 1 : 1;
 
-        $produk = Produk::create($request->all());
+        $produk = new Produk();
+        $produk->kode_produk = 'PRD-' . tambah_nol_didepan($kode_produk, 6);
+        $produk->nama_produk = $request->nama_produk;
+        $produk->harga_jual = $request->harga_jual;
+        $produk->stok = $request->stok;
+        $produk->save();
 
         return response()->json('Data berhasil disimpan', 200);
     }

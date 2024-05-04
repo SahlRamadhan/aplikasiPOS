@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Ecommerce Dashboard &mdash; Stisla</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Point of Sale  &mdash; Stisla</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="{{ asset('../assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('../assets/css/components.css') }}">
 
+    @stack('css')
+
 </head>
 
 <body>
@@ -59,7 +61,7 @@
         </div>
         <footer class="main-footer">
             <div class="footer-left">
-                Copyright &copy; 2024 <div class="bullet"></div> Design By <a href="https://nauv.al/">Sahl Ramdhan</a>
+                Copyright &copy; 2024 <div class="bullet"></div> Design By <a href="https://nauv.al/">Muza Mebel</a>
             </div>
         </footer>
     </div>

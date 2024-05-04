@@ -17,7 +17,7 @@ class PelangganController extends Controller
 
     public function data()
     {
-        $pelanggan = Pelanggan::orderBy('kode_pelanggan')->get();
+        $pelanggan = Pelanggan::orderBy('kode_pelanggan','desc')->get();
 
         return datatables()
             ->of($pelanggan)
@@ -49,10 +49,10 @@ class PelangganController extends Controller
     public function store(Request $request)
     {
         $pelanggan = Pelanggan::latest()->first() ?? new Pelanggan();
-        $kode_pelanggan =  (int) $pelanggan->kode_pelanggan + 1;
+        $kode_pelanggan =  $pelanggan ? (int) substr($pelanggan->kode_pelanggan, 5) + 1 : 1;
 
         $pelanggan = new Pelanggan();
-        $pelanggan->kode_pelanggan = tambah_nol_didepan( $kode_pelanggan, 5);
+        $pelanggan->kode_pelanggan = 'PLGN-' . tambah_nol_didepan( $kode_pelanggan, 6);
         $pelanggan->nama_pelanggan = $request->nama_pelanggan;
         $pelanggan->telepon = $request->telepon;
         $pelanggan->alamat = $request->alamat;

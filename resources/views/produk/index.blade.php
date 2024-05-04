@@ -16,7 +16,7 @@
                     <thead>
                         <tr>
                             <th width= "5%">No</th>
-                            <th class="label label-success">Kode Produk</th>
+                            <th>Kode Produk</th>
                             <th>Nama Produk</th>
                             <th>Harga</th>
                             <th>Stok</th>

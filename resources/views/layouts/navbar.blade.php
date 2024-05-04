@@ -9,7 +9,7 @@
      <ul class="navbar-nav navbar-right">
          <li class="dropdown"><a href="#" data-toggle="dropdown"
                  class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                 <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+                 <img alt="image" src="assets/img/avatar/avatar-2.png" class="rounded-circle mr-1">
                  <div class="d-sm-none d-lg-inline-block">{{ auth()->user()->name }}</div>
              </a>
              <div class="dropdown-menu dropdown-menu-right">
@@ -34,10 +34,10 @@
  <div class="main-sidebar sidebar-style-2">
      <aside id="sidebar-wrapper">
          <div class="sidebar-brand">
-             <a href="index.html">Stisla</a>
+             <a href="index.html">Muza Mebel</a>
          </div>
          <div class="sidebar-brand sidebar-brand-sm">
-             <a href="index.html">St</a>
+             <a href="index.html">MZ</a>
          </div>
          <ul class="sidebar-menu">
              <li class="menu-header">Dashboard</li>
@@ -48,13 +48,13 @@
              <li class="{{ Request::is('produk') ? 'active' : '' }}"><a class="nav-link" href="{{ route('produk.index') }}"><i
                          class="fas fa-cubes"></i><span>Produk</span></a></li>
              <li class="{{ Request::is('pelanggan') ? 'active' : '' }}"><a class="nav-link" href="{{ route('pelanggan.index') }}"><i
-                         class="fas fa-user"></i><span>Pelanggan</span></a></li>
+                         class="fas fa-users"></i><span>Pelanggan</span></a></li>
              <li class="menu-header">Transaki </li>
              <li class="{{ Request::is('permintaan') ? 'active' : '' }}"><a class="nav-link" href=""><i
                          class="fas fa-download"></i><span>Permintaan</span></a></li>
              <li class="{{ Request::is('penjualan') ? 'active' : '' }}"><a class="nav-link" href=""><i
-                         class="fas fa-table"></i><span>Penjualan</span></a></li>
-             <li class="{{ Request::is('transaksi') ? 'active' : '' }}"><a class="nav-link" href=""><i
+                         class="fas fa-wallet"></i><span>Penjualan</span></a></li>
+             <li class="{{ Request::is('transaksi') ? 'active' : '' }}"><a class="nav-link" href="{{ route('transaksi.baru') }}"><i
                          class="fas fa-cart-plus"></i><span>Transkai</span></a></li>
              <li class="menu-header">Report </li>
              <li class="{{ Request::is('laporan') ? 'active' : '' }}"><a class="nav-link" href=""><i

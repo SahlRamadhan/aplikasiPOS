@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('pelanggan', function (Blueprint $table) {
             $table->increments('id_pelanggan');
-            $table->string('kode_pelanggan')->unique();
-            $table->string('nama_pelanggan');
+            $table->string('kode_pelanggan',25)->unique();
+            $table->string('nama_pelanggan',25);
             $table->text('alamat')->nullable();
-            $table->string('telepon');
+            $table->string('telepon',15);
             $table->timestamps();
         });
     }
