@@ -37,7 +37,6 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-body">
-
                     <form class="form-produk">
                         @csrf
                         <div class="form-group row">
@@ -68,7 +67,7 @@
 
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="tampil-bayar bg-primary"></div>
+                            <div class="tampil-bayar bg-info"></div>
                             <div class="tampil-terbilang"></div>
                         </div>
                         <div class="col-lg-4">
@@ -131,8 +130,8 @@
                 </div>
 
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i
-                            class="fa fa-floppy-o"></i> Simpan Transaksi</button>
+                    <button type="submit" class="btn btn-primary btn-simpan"><i class="fa fa-floppy-o"></i> Simpan
+                        Transaksi</button>
                 </div>
             </div>
         </div>
@@ -146,7 +145,6 @@
         let table, table2;
 
         $(function() {
-            $('body').addClass('sidebar-collapse');
 
             table = $('.table-penjualan').DataTable({
                     responsive: true,
@@ -173,9 +171,6 @@
                         {
                             data: 'jumlah'
                         },
-                        // {
-                        //     data: 'diskon'
-                        // },
                         {
                             data: 'subtotal'
                         },
@@ -267,16 +262,33 @@
         }
 
         function tambahProduk() {
-            $.post('{{ route('transaksi.store') }}', $('.form-produk').serialize())
+            // Mendapatkan ID produk dari input tersembunyi
+            let id_produk = $('#id_produk').val();
+
+            // Mengirimkan permintaan AJAX untuk mendapatkan data stok produk
+            $.get(`/produk/${id_produk}`)
                 .done(response => {
-                    $('#kode_produk').focus();
-                    table.ajax.reload(() => loadForm($('#diskon').val()));
+                    // Memeriksa stok produk
+                    if (response.stok <= 0) {
+                        // Menampilkan notifikasi jika stok kosong
+                        Swal.fire("Oops!", "Maaf, Stok Produk ini habis", "warning");
+                    } else {
+                        // Jika stok tersedia, lanjutkan dengan menambahkan produk ke transaksi
+                        $.post('{{ route('transaksi.store') }}', $('.form-produk').serialize())
+                            .done(response => {
+                                $('#kode_produk').focus();
+                                table.ajax.reload(() => loadForm($('#diskon').val()));
+                            })
+                            .fail(errors => {
+                                Swal.fire("Error", "Tidak dapat menyimpan data", "error");
+                                return;
+                            });
+                    }
                 })
                 .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
+                    Swal.fire("Error", "Gagal memuat data stok produk", "error");
                     return;
                 });
-
         }
 
         function tampilpelanggan() {

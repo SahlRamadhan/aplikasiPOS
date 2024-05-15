@@ -52,7 +52,7 @@
              <li class="menu-header">Transaki </li>
              <li class="{{ Request::is('permintaan') ? 'active' : '' }}"><a class="nav-link" href=""><i
                          class="fas fa-download"></i><span>Permintaan</span></a></li>
-             <li class="{{ Request::is('penjualan') ? 'active' : '' }}"><a class="nav-link" href=""><i
+             <li class="{{ Request::is('penjualan') ? 'active' : '' }}"><a class="nav-link" href="{{ route('penjualan.index') }}"><i
                          class="fas fa-wallet"></i><span>Penjualan</span></a></li>
              <li class="{{ Request::is('transaksi') ? 'active' : '' }}"><a class="nav-link" href="{{ route('transaksi.baru') }}"><i
                          class="fas fa-cart-plus"></i><span>Transkai</span></a></li>
