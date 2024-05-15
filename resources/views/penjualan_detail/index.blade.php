@@ -77,8 +77,7 @@
                                 <input type="hidden" name="total" id="total">
                                 <input type="hidden" name="total_item" id="total_item">
                                 <input type="hidden" name="bayar" id="bayar">
-                                <input type="hidden" name="id_pelanggan" id="id_pelanggan"
-                                    value="{{ $pelangganSelected->id_pelanggan }}">
+                                <input type="hidden" name="id_pelanggan" id="id_pelanggan">
 
                                 <div class="form-group row">
                                     <label for="totalrp" class="col-lg-2 control-label">Total</label>
@@ -90,8 +89,7 @@
                                     <label for="kode_pelanggan" class="col-lg-2 control-label">Pelanggan</label>
                                     <div class="col-lg-8">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="kode_pelanggan"
-                                                value="{{ $pelangganSelected->kode_pelanggan }}">
+                                            <input type="text" class="form-control" id="kode_pelanggan">
                                             <button onclick="tampilpelanggan()" class="btn btn-info btn-flat"
                                                 type="button"><i class="fa fa-arrow-right"></i></button>
                                         </div>
@@ -101,7 +99,7 @@
                                     <label for="diskon" class="col-lg-2 control-label">Diskon</label>
                                     <div class="col-lg-8">
                                         <input type="number" name="diskon" id="diskon" class="form-control"
-                                            value="{{ !empty($pelangganSelected->id_pelanggan) ? $diskon : 0 }}" readonly>
+                                            value="{{  $diskon = 0 }}" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -145,16 +143,16 @@
         let table, table2;
 
         $(function() {
-
+            // Inisialisasi DataTable untuk menampilkan data penjualan
             table = $('.table-penjualan').DataTable({
                     responsive: true,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
                     ajax: {
-                        url: '{{ route('transaksi.data', $id_penjualan) }}',
+                        url: '{{ route('transaksi.data', $id_penjualan) }}', // URL untuk mengambil function data di controller penjualanDetail
                     },
-                    columns: [{
+                    columns: [{ // Konfigurasi kolom-kolom tabel
                             data: 'DT_RowIndex',
                             searchable: false,
                             sortable: false
@@ -185,17 +183,21 @@
                     paginate: false
                 })
                 .on('draw.dt', function() {
-                    loadForm($('#diskon').val());
+                    loadForm($('#diskon').val()); // Memuat form dengan diskon yang diatur
                     setTimeout(() => {
-                        $('#diterima').trigger('input');
+                        $('#diterima').trigger(
+                        'input'); // Memuat form dengan jumlah diterima yang diatur
                     }, 300);
                 });
-            table2 = $('.table-produk').DataTable();
+            table2 = $('.table-produk').DataTable(); // Inisialisasi DataTable untuk menampilkan data produk
 
+            // Mengatur event saat input jumlah produk diubah
             $(document).on('input', '.quantity', function() {
+                // Mendapatkan ID produk dan jumlah dari input
                 let id = $(this).data('id');
                 let jumlah = parseInt($(this).val());
 
+                // Memastikan jumlah produk tidak kurang dari 1 atau lebih dari 10000
                 if (jumlah < 1) {
                     $(this).val(1);
                     alert('Jumlah tidak boleh kurang dari 1');
@@ -207,6 +209,7 @@
                     return;
                 }
 
+                // Mengirim permintaan AJAX untuk mengupdate jumlah produk
                 $.post(`{{ url('/transaksi') }}/${id}`, {
                         '_token': $('[name=csrf-token]').attr('content'),
                         '_method': 'put',
@@ -223,7 +226,9 @@
                     });
             });
 
+            // Mengatur event saat input diskon diubah
             $(document).on('input', '#diskon', function() {
+                // Memuat form dengan diskon yang diatur
                 if ($(this).val() == "") {
                     $(this).val(0).select();
                 }
@@ -231,7 +236,9 @@
                 loadForm($(this).val());
             });
 
+            // Mengatur event saat input jumlah diterima diubah
             $('#diterima').on('input', function() {
+                // Memuat form dengan jumlah diterima yang diatur
                 if ($(this).val() == "") {
                     $(this).val(0).select();
                 }
@@ -241,6 +248,7 @@
                 $(this).select();
             });
 
+            // Mengatur event saat tombol simpan ditekan
             $('.btn-simpan').on('click', function() {
                 $('.form-penjualan').submit();
             });
@@ -269,7 +277,7 @@
             $.get(`/produk/${id_produk}`)
                 .done(response => {
                     // Memeriksa stok produk
-                    if (response.stok <= 0) {
+                    if (response.stok <= 10) {
                         // Menampilkan notifikasi jika stok kosong
                         Swal.fire("Oops!", "Maaf, Stok Produk ini habis", "warning");
                     } else {

@@ -39,7 +39,7 @@ class PenjualanController extends Controller
             })
             ->addColumn('kode_pelanggan', function ($penjualan) {
                 $pelanggan = $penjualan->pelanggan->kode_pelanggan ?? '';
-                return '<span class="badge badge-success">' . $pelanggan . '</spa>';
+                return '<span class="badge badge-success">' . $pelanggan . '</span>';
             })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';

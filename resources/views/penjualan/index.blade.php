@@ -41,9 +41,9 @@
             serverSide: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('penjualan.data') }}',
+                url: '{{ route('penjualan.data') }}',// URL untuk mengambil function data di controller penjualan
             },
-            columns: [
+            columns: [ // Konfigurasi kolom-kolom tabel
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'tanggal'},
                 {data: 'kode_pelanggan'},

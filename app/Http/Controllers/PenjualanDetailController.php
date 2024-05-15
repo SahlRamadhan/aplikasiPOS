@@ -18,13 +18,16 @@ class PenjualanDetailController extends Controller
         
         // Cek apakah ada transaksi yang sedang berjalan
         if ($id_penjualan = session('id_penjualan')) {
+            // Jika ada, ambil detail penjualan dan data pelanggan terkait
             $penjualan = Penjualan::find($id_penjualan);
             $pelangganSelected = $penjualan->pelanggan ?? new Pelanggan();
             $produk = Produk::orderBy('nama_produk')->get();
             $pelanggan = Pelanggan::orderBy('nama_pelanggan')->get();
 
+            // Tampilkan view dengan data yang diperlukan
             return view('penjualan_detail.index', compact('produk', 'pelanggan','id_penjualan', 'penjualan', 'pelangganSelected'));
         } else {
+            // Jika tidak ada transaksi berjalan, arahkan pengguna ke halaman baru sesuai peran mereka
             if (auth()->user()->level == 1) {
                 return redirect()->route('transaksi.baru');
             } else {
@@ -49,11 +52,8 @@ class PenjualanDetailController extends Controller
             $row['nama_produk'] = $item->produk['nama_produk'];
             $row['harga_jual']  = 'Rp. ' . format_uang($item->harga_jual);
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="' . $item->id_penjualan_detail . '" value="' . $item->jumlah . '">';
-            $row['diskon']      = $item->diskon . '%';
             $row['subtotal']    = 'Rp. ' . format_uang($item->subtotal);
-            $row['aksi']        = '<div class="btn-group">
-                                    <button onclick="deleteData(`' . route('transaksi.destroy', $item->id_penjualan_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                                </div>';
+            $row['aksi']        = '<button onclick="deleteData(`' . route('transaksi.destroy', $item->id_penjualan_detail) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
             $data[] = $row;
 
             $total += $item->harga_jual * $item->jumlah - (($item->diskon * $item->jumlah) / 100 * $item->harga_jual);
@@ -68,7 +68,6 @@ class PenjualanDetailController extends Controller
             'nama_produk' => '',
             'harga_jual'  => '',
             'jumlah'      => '',
-            'diskon'      => $diskon . '%', // Tambahkan diskon langsung ke sini
             'subtotal'    => '',
             'aksi'        => '',
         ];
@@ -93,19 +92,12 @@ class PenjualanDetailController extends Controller
      */
     public function store(Request $request)
     {
+         // Mengambil produk berdasarkan ID yang diberikan dalam permintaan
         $produk = Produk::where('id_produk', $request->id_produk)->first();
+
         if (!$produk) {
             return response()->json('Data gagal disimpan', 400);
         }
-
-        if ($produk->stok <= 0) {
-            // Jika stok produk habis, kirim respons ke client
-            return response()->json([
-                'success' => false,
-                'nama_produk' => $produk->nama_produk
-            ]);
-        }
-
 
         // Hitung total belanja dari semua item dalam transaksi
         $totalBelanja = PenjualanDetail::where('id_penjualan', $request->id_penjualan)
@@ -148,9 +140,12 @@ class PenjualanDetailController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Mengambil detail penjualan berdasarkan ID yang diberikan dalam permintaan
         $detail = PenjualanDetail::find($id);
+
+        // Memperbarui jumlah dan subtotal dari detail penjualan
         $detail->jumlah = $request->jumlah;
-        $detail->subtotal = $detail->harga_jual * $request->jumlah - (($detail->diskon * $request->jumlah) / 100 * $detail->harga_jual);;
+        $detail->subtotal = $detail->harga_jual * $request->jumlah - (($detail->diskon * $request->jumlah) / 100 * $detail->harga_jual);
         $detail->update();
     }
 
@@ -167,8 +162,11 @@ class PenjualanDetailController extends Controller
 
     public function loadForm($diskon = 0, $total = 0, $diterima = 0)
     {
+         // Hitung total pembayaran setelah diskon
         $bayar   = $total - ($diskon / 100 * $total);
+        // Hitung kembalian jika uang diterima tidak nol
         $kembali = ($diterima != 0) ? $diterima - $bayar : 0;
+        // Format data untuk ditampilkan
         $data    = [
             'totalrp' => format_uang($total),
             'bayar' => $bayar,
