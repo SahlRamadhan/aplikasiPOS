@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedInteger('id_user');
             $table->timestamps();
 
+            // Menambahkan kunci asing ke tabel pelanggan
             $table->foreign('id_pelanggan')->references('id_pelanggan')->on('pelanggan')->onDelete('restrict')->onUpdate('restrict');
 
         });
