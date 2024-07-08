@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('penjualan_detail', function (Blueprint $table) {
-            $table->increments('id_penjualan_detail');
-            $table->unsignedInteger('id_penjualan');
-            $table->unsignedInteger('id_produk');
+            $table->id();
+            $table->unsignedBigInteger('id_penjualan');
+            $table->char('id_produkjadi',10)->default(null);
             $table->integer('harga_jual');
             $table->integer('jumlah');
             $table->tinyInteger('diskon')->default(0);
@@ -23,9 +23,9 @@ return new class extends Migration
 
 
             // Menambahkan kunci asing ke tabel produk
-            $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_produkjadi')->references('id')->on('produk_jadi')->onDelete('cascade')->onUpdate('cascade');
             // Menambahkan kunci asing ke tabel penjualan
-            $table->foreign('id_penjualan')->references('id_penjualan')->on('penjualan')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_penjualan')->references('id')->on('penjualan')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

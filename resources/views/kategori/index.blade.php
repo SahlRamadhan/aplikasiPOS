@@ -6,7 +6,7 @@
 @section('isi')
     <div class="card">
         <div class="card-header">
-            <button class="btn btn-success btn-xs btn-flat" onclick="addForm('{{ route('produk.store') }}')"><i
+            <button class="btn btn-success btn-xs btn-flat" onclick="addForm('{{ route('kategori.store') }}')"><i
                     class="fa fa-plus-circle"></i>
                 Tambah</button>
         </div>
@@ -16,11 +16,9 @@
                     <thead>
                         <tr>
                             <th width= "5%">No</th>
-                            <th>Kode Produk</th>
-                            <th>Nama Produk</th>
-                            <th>Kategori</th>
-                            <th>Harga</th>
-                            <th>Stok</th>
+                            <th>Kode Kategori</th>
+                            <th>Nama</th>
+                            <th>Keterangan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -29,7 +27,7 @@
         </div>
     </div>
 @endsection
-@includeif('produk.form')
+@includeif('kategori.form')
 @push('scripts')
     <script>
         let mytable;
@@ -41,11 +39,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route('produk.data') }}',
-                    dataSrc: function(json) {
-                        console.log(json);
-                        return json.data;
-                    }
+                    url: '{{ route('kategori.data') }}',
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -53,19 +47,13 @@
                         sortable: false
                     },
                     {
-                        data: 'id'
+                        data: 'kode_kategori'
                     },
                     {
                         data: 'nama'
                     },
                     {
-                        data: 'id_kategori'
-                    },
-                    {
-                        data: 'harga'
-                    },
-                    {
-                        data: 'stok'
+                        data: 'keterangan'
                     },
                     {
                         data: 'aksi',
@@ -93,7 +81,7 @@
 
         function addForm(url) {
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Tambah Produk');
+            $('#modalForm .modal-title').text('Tambah Kategori');
 
             $('#modalForm form')[0].reset();
             $('#modalForm form').attr('action', url);
@@ -103,7 +91,7 @@
 
         function editForm(url) {
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Edit Produk');
+            $('#modalForm .modal-title').text('Edit Kategori');
 
             $('#modalForm form')[0].reset();
             $('#modalForm form').attr('action', url);
@@ -113,8 +101,7 @@
             $.get(url)
                 .done((response) => {
                     $('#modalForm [name=nama]').val(response.nama);
-                    $('#modalForm [name=harga]').val(response.harga);
-                    $('#modalForm [name=stok]').val(response.stok);
+                    $('#modalForm [name=keterangan]').val(response.keterangan);
 
                 })
                 .fail((errors) => {

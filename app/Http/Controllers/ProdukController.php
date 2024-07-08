@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 
@@ -12,32 +13,36 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        return view('produk.index');
+        $kategori = Kategori::all();
+        return view('produk.index', compact('kategori'));
     }
 
     public function data()
     {
-        $produk = Produk::orderBy('id_produk', 'desc');
+        $produk = Produk::with('kategori')->orderBy('id', 'asc')->get();
 
         return datatables()
             ->of($produk)
             ->addIndexColumn()
-            ->addColumn('kode_produk', function ($produk) {
-                return '<span class="badge badge-success">' . $produk->kode_produk . '</span>';
+            ->addColumn('id', function ($produk) {
+                return '<span class="badge badge-success">' . $produk->id . '</span>';
             })
-            ->addColumn('harga_jual', function ($produk) {
-                return format_uang($produk->harga_jual);
+            ->addColumn('id_kategori', function ($produk) {
+                return $produk->kategori->nama ?? '-';
+            })
+            ->addColumn('harga', function ($produk) {
+                return format_uang($produk->harga);
             })
             ->addColumn('stok', function ($produk) {
                 return format_uang($produk->stok);
             })
             ->addColumn('aksi', function ($produk) {
                 return '
-                    <button onclick="editForm(`' . route('produk.update', $produk->id_produk) . '`)" class="btn btn-info"><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`' . route('produk.destroy', $produk->id_produk) . '`)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                    <button onclick="editForm(`' . route('produk.update', $produk->id) . '`)" class="btn btn-info"><i class="fa fa-eye"></i></button>
+                    <button onclick="deleteData(`' . route('produk.destroy', $produk->id) . '`)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                 ';
             })
-            ->rawColumns(['aksi', 'kode_produk'])
+            ->rawColumns(['aksi', 'id'])
             ->make(true);
     }
 
@@ -55,12 +60,13 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $produk = Produk::latest()->first() ?? new Produk();
-        $kode_produk =  $produk ? (int) substr($produk->kode_produk, 5) + 1 : 1;
+        $id =  $produk ? (int) substr($produk->id, 5) + 1 : 1;
 
         $produk = new Produk();
-        $produk->kode_produk = 'PRD-' . tambah_nol_didepan($kode_produk, 6);
-        $produk->nama_produk = $request->nama_produk;
-        $produk->harga_jual = $request->harga_jual;
+        $produk->id = 'PJ-' . tambah_nol_didepan($id, 3);
+        $produk->nama = $request->nama;
+        $produk->id_kategori = $request->id_kategori;
+        $produk->harga = $request->harga;
         $produk->stok = $request->stok;
         $produk->save();
 

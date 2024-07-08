@@ -45,20 +45,24 @@
                      href="{{ route('dashboard') }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
              </li>
              <li class="menu-header">Data Master </li>
-             <li class="{{ Request::is('produk') ? 'active' : '' }}"><a class="nav-link" href="{{ route('produk.index') }}"><i
-                         class="fas fa-cubes"></i><span>Produk</span></a></li>
-             <li class="{{ Request::is('pelanggan') ? 'active' : '' }}"><a class="nav-link" href="{{ route('pelanggan.index') }}"><i
-                         class="fas fa-users"></i><span>Pelanggan</span></a></li>
+             <li class="{{ Request::is('produk') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('produk.index') }}"><i class="fas fa-cubes"></i><span>Produk</span></a></li>
+             <li class="{{ Request::is('kategori') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('kategori.index') }}"><i class="fas fa-list"></i><span>Kategori</span></a></li>
+             <li class="{{ Request::is('pelanggan') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('pelanggan.index') }}"><i class="fas fa-users"></i><span>Pelanggan</span></a></li>
              <li class="menu-header">Transaki </li>
-             <li class="{{ Request::is('permintaan') ? 'active' : '' }}"><a class="nav-link" href=""><i
-                         class="fas fa-download"></i><span>Permintaan</span></a></li>
-             <li class="{{ Request::is('penjualan') ? 'active' : '' }}"><a class="nav-link" href="{{ route('penjualan.index') }}"><i
-                         class="fas fa-wallet"></i><span>Penjualan</span></a></li>
-             <li class="{{ Request::is('transaksi') ? 'active' : '' }}"><a class="nav-link" href="{{ route('transaksi.baru') }}"><i
-                         class="fas fa-cart-plus"></i><span>Transkai</span></a></li>
+             <li class="{{ Request::is('permintaan') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('permintaan.index') }}"><i class="fas fa-download"></i><span>Permintaan</span></a>
+             </li>
+             <li class="{{ Request::is('penjualan') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('penjualan.index') }}"><i class="fas fa-wallet"></i><span>Penjualan</span></a></li>
+             <li class="{{ Request::is('transaksi') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('transaksi.baru') }}"><i class="fas fa-cart-plus"></i><span>Transkai</span></a>
+             </li>
              <li class="menu-header">Report </li>
-             <li class="{{ Request::is('laporan') ? 'active' : '' }}"><a class="nav-link" href=""><i
-                         class="fas fa-file-pdf"></i><span>Laporan</span></a></li>
+             <li class="{{ Request::is('laporan') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('laporan.index') }}"><i class="fas fa-file-pdf"></i><span>Laporan</span></a></li>
          </ul>
      </aside>
  </div>

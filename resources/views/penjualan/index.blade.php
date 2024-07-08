@@ -46,7 +46,7 @@
             columns: [ // Konfigurasi kolom-kolom tabel
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'tanggal'},
-                {data: 'kode_pelanggan'},
+                {data: 'id_pelanggan'},
                 {data: 'total_item'},
                 {data: 'total_harga'},
                 {data: 'diskon'},
@@ -62,9 +62,9 @@
             dom: 'Brt',
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_produk'},
-                {data: 'nama_produk'},
-                {data: 'harga_jual'},
+                {data: 'id'},
+                {data: 'nama'},
+                {data: 'harga'},
                 {data: 'jumlah'},
                 {data: 'subtotal'},
             ]

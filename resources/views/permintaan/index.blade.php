@@ -1,12 +1,13 @@
 @extends('layouts.main')
 
 @section('judul')
-    <h3>Daftar Produk</h3>
+    Daftar Permintaan
 @endsection
+
 @section('isi')
     <div class="card">
         <div class="card-header">
-            <button class="btn btn-success btn-xs btn-flat" onclick="addForm('{{ route('produk.store') }}')"><i
+            <button class="btn btn-success btn-xs btn-flat" onclick="addForm('{{ route('permintaan.store') }}')"><i
                     class="fa fa-plus-circle"></i>
                 Tambah</button>
         </div>
@@ -16,11 +17,11 @@
                     <thead>
                         <tr>
                             <th width= "5%">No</th>
-                            <th>Kode Produk</th>
-                            <th>Nama Produk</th>
-                            <th>Kategori</th>
-                            <th>Harga</th>
-                            <th>Stok</th>
+                            <th>Kode Permintaan</th>
+                            <th>ID Produk</th>
+                            <th>Nama</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -29,7 +30,7 @@
         </div>
     </div>
 @endsection
-@includeif('produk.form')
+@includeIf('permintaan.form')
 @push('scripts')
     <script>
         let mytable;
@@ -41,11 +42,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route('produk.data') }}',
-                    dataSrc: function(json) {
-                        console.log(json);
-                        return json.data;
-                    }
+                    url: '{{ route('permintaan.data') }}',
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -53,26 +50,26 @@
                         sortable: false
                     },
                     {
-                        data: 'id'
+                        data: 'id_permintaan'
+                    },
+                    {
+                        data: 'id_produk_jadi'
                     },
                     {
                         data: 'nama'
                     },
                     {
-                        data: 'id_kategori'
+                        data: 'jumlah'
                     },
                     {
-                        data: 'harga'
-                    },
-                    {
-                        data: 'stok'
+                        data: 'status'
                     },
                     {
                         data: 'aksi',
                         searchable: false,
                         sortable: false
                     },
-                ]
+                ],
             });
 
             $('#modalForm').validator().on('submit', function(e) {
@@ -93,36 +90,22 @@
 
         function addForm(url) {
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Tambah Produk');
+            $('#modalForm .modal-title').text('Tambah Permintaan');
 
             $('#modalForm form')[0].reset();
             $('#modalForm form').attr('action', url);
             $('#modalForm [name=_method]').val('post');
             $('#modalForm [name=nama]').focus();
+
+            // Populate dropdown select options from produkData
+            $('#id_produk').empty();
+            $('#id_produk').append('<option value="">Pilih Produk</option>');
+            @foreach ($produk as $produk)
+                $('#id_produk').append('<option value="{{ $produk['id'] }}">{{ $produk['nama'] }}</option>');
+            @endforeach
+
+      
         }
-
-        function editForm(url) {
-            $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Edit Produk');
-
-            $('#modalForm form')[0].reset();
-            $('#modalForm form').attr('action', url);
-            $('#modalForm [name=_method]').val('put');
-            $('#modalForm [name=nama]').focus();
-
-            $.get(url)
-                .done((response) => {
-                    $('#modalForm [name=nama]').val(response.nama);
-                    $('#modalForm [name=harga]').val(response.harga);
-                    $('#modalForm [name=stok]').val(response.stok);
-
-                })
-                .fail((errors) => {
-                    Swal.fire("Oops!", "Tidak dapat menampilkan data!!", "error");
-                    return;
-                });
-        }
-
         function deleteData(url) {
             // Menggantikan perintah confirm dengan SweetAlert
             Swal.fire({

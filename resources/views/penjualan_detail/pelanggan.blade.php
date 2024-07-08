@@ -23,7 +23,7 @@
                                 <td>{{ $item->alamat }}</td>
                                 <td>
                                     <a href="#" class="btn btn-primary btn-xs btn-flat"
-                                        onclick="pilihpelanggan('{{ $item->id_pelanggan }}', '{{ $item->kode_pelanggan }}')">
+                                        onclick="pilihpelanggan('{{ $item->id }}', '{{ $item->kode_pelanggan }}')">
                                         <i class="fa fa-check-circle"></i>
                                         Pilih
                                     </a>

@@ -11,29 +11,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group ">
-                        <label for="nama" class="form-label">Nama Produk</label>
+                        <label for="nama" class="form-label">Nama Kategori</label>
                         <input type="text" name="nama" id="nama" class="form-control" required
                             autofocus>
                         <span class="help-block with-errors"></span>
                     </div>
-                    <div class="form-group">
-                            <label for="id_kategori">Kategori</label>
-                            <select name="id_kategori" id="id_kategori" class="form-control" required>
-                                <option value="">Pilih Kategori</option>
-                                @foreach($kategori as $kat)
-                                    <option value="{{ $kat->id }}" @selected($kat->id_kategori == $kat->id)>{{ $kat->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                     <div class="form-group ">
-                        <label for="harga" class="form-label">Harga</label>
-                        <input type="number" name="harga" id="harga" class="form-control" required>
-                        <span class="help-block with-errors"></span>
-                    </div>
-                    <div class="form-group ">
-                        <label for="stok" class="form-label">Stok</label>
-                        <input type="number" name="stok" id="stok" class="form-control" required
-                            value="0">
+                        <label for="keterangan" class="form-label">Keterangan</label>
+                        <input type="text" name="keterangan" id="keterangan" class="form-control" required>
                         <span class="help-block with-errors"></span>
                     </div>
                 </div>

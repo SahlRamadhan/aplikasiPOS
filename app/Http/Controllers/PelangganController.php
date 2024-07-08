@@ -17,7 +17,7 @@ class PelangganController extends Controller
 
     public function data()
     {
-        $pelanggan = Pelanggan::orderBy('kode_pelanggan','desc')->get();
+        $pelanggan = Pelanggan::orderBy('kode_pelanggan','asc')->get();
 
         return datatables()
             ->of($pelanggan)
@@ -27,8 +27,8 @@ class PelangganController extends Controller
             })
             ->addColumn('aksi', function ($pelanggan) {
                 return '
-                    <button type="button" onclick="editForm(`' . route('pelanggan.update', $pelanggan->id_pelanggan) . '`)" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button>
-                    <button type="button" onclick="deleteData(`' . route('pelanggan.destroy', $pelanggan->id_pelanggan) . '`)" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>
+                    <button type="button" onclick="editForm(`' . route('pelanggan.update', $pelanggan->id) . '`)" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button>
+                    <button type="button" onclick="deleteData(`' . route('pelanggan.destroy', $pelanggan->id) . '`)" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>
                 ';
             })
             ->rawColumns(['aksi', 'select_all', 'kode_pelanggan'])
@@ -52,7 +52,7 @@ class PelangganController extends Controller
         $kode_pelanggan =  $pelanggan ? (int) substr($pelanggan->kode_pelanggan, 5) + 1 : 1;
 
         $pelanggan = new Pelanggan();
-        $pelanggan->kode_pelanggan = 'PLGN-' . tambah_nol_didepan( $kode_pelanggan, 6);
+        $pelanggan->kode_pelanggan = 'PLGN-' . tambah_nol_didepan( $kode_pelanggan, 3);
         $pelanggan->nama_pelanggan = $request->nama_pelanggan;
         $pelanggan->telepon = $request->telepon;
         $pelanggan->alamat = $request->alamat;

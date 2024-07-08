@@ -12,19 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('penjualan', function (Blueprint $table) {
-            $table->increments('id_penjualan');
-            $table->unsignedInteger('id_pelanggan')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('id_pelanggan')->nullable();
             $table->integer('total_item');
             $table->integer('total_harga');
             $table->tinyInteger('diskon')->default(0);
             $table->integer('bayar')->default(0);
             $table->integer('diterima')->default(0);
-            $table->unsignedInteger('id_user');
+            $table->unsignedBigInteger('id_user');
             $table->timestamps();
 
             // Menambahkan kunci asing ke tabel pelanggan
-            $table->foreign('id_pelanggan')->references('id_pelanggan')->on('pelanggan')->onDelete('restrict')->onUpdate('restrict');
-
+            $table->foreign('id_pelanggan')->references('id')->on('pelanggan')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

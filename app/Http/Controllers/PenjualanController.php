@@ -20,7 +20,7 @@ class PenjualanController extends Controller
 
     public function data()
     {
-        $penjualan = Penjualan::with('pelanggan', 'user')->orderBy('id_penjualan', 'desc')->get();
+        $penjualan = Penjualan::with('pelanggan', 'user')->orderBy('id', 'desc')->get();
 
         return datatables()
             ->of($penjualan)
@@ -37,7 +37,7 @@ class PenjualanController extends Controller
             ->addColumn('tanggal', function ($penjualan) {
                 return tanggal_indonesia($penjualan->created_at, false);
             })
-            ->addColumn('kode_pelanggan', function ($penjualan) {
+            ->addColumn('id_pelanggan', function ($penjualan) {
                 $pelanggan = $penjualan->pelanggan->kode_pelanggan ?? '';
                 return '<span class="badge badge-success">' . $pelanggan . '</span>';
             })
@@ -49,11 +49,11 @@ class PenjualanController extends Controller
             })
             ->addColumn('aksi', function ($penjualan) {
                 return '
-                    <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                    <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                    <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 ';
             })
-            ->rawColumns(['aksi', 'kode_pelanggan'])
+            ->rawColumns(['aksi', 'id_pelanggan'])
             ->make(true);
     }
 
@@ -72,7 +72,7 @@ class PenjualanController extends Controller
         $penjualan->id_user = auth()->id();
         $penjualan->save();
 
-        session(['id_penjualan' => $penjualan->id_penjualan]);
+        session(['id_penjualan' => $penjualan->id]);
         return redirect()->route('transaksi.index');
     }
 
@@ -91,12 +91,12 @@ class PenjualanController extends Controller
         $penjualan->diterima = $request->diterima;
         $penjualan->update();
 
-        $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+        $detail = PenjualanDetail::where('id_penjualan', $penjualan->id)->get();
         foreach ($detail as $item) {
             $item->diskon = $request->diskon;
             $item->update();
 
-            $produk = Produk::find($item->id_produk);
+            $produk = Produk::find($item->id_produkjadi);
             $produk->stok -= $item->jumlah;
             $produk->update();
         }
@@ -114,13 +114,13 @@ class PenjualanController extends Controller
         return datatables()
             ->of($detail)
             ->addIndexColumn()
-            ->addColumn('kode_produk', function ($detail) {
-                return '<span class="badge badge-success">' . $detail->produk->kode_produk . '</span>';
+            ->addColumn('id', function ($detail) {
+                return '<span class="badge badge-success">' . $detail->produk->id . '</span>';
             })
-            ->addColumn('nama_produk', function ($detail) {
-                return $detail->produk->nama_produk;
+            ->addColumn('nama', function ($detail) {
+                return $detail->produk->nama;
             })
-            ->addColumn('harga_jual', function ($detail) {
+            ->addColumn('harga', function ($detail) {
                 return 'Rp. ' . format_uang($detail->harga_jual);
             })
             ->addColumn('jumlah', function ($detail) {
@@ -155,9 +155,9 @@ class PenjualanController extends Controller
     public function destroy(string $id)
     {
         $penjualan = Penjualan::find($id);
-        $detail    = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+        $detail    = PenjualanDetail::where('id_penjualan', $penjualan->id)->get();
         foreach ($detail as $item) {
-            $produk = Produk::find($item->id_produk);
+            $produk = Produk::find($item->id_produkjadi);
             if ($produk) {
                 $produk->stok += $item->jumlah;
                 $produk->update();

@@ -44,8 +44,8 @@
                             <div class="col-lg-5">
                                 <div class="input-group">
                                     <input type="hidden" name="id_penjualan" id="id_penjualan" value="{{ $id_penjualan }}">
-                                    <input type="hidden" name="id_produk" id="id_produk">
-                                    <input type="text" class="form-control" name="kode_produk" id="kode_produk">
+                                    <input type="hidden" name="id_produkjadi" id="id_produkjadi">
+                                    <input type="text" class="form-control" name="id" id="id">
                                     <button onclick="tampilProduk()" class="btn btn-info btn-flat" type="button"><i
                                             class="fa fa-arrow-right"></i></button>
                                 </div>
@@ -158,10 +158,10 @@
                             sortable: false
                         },
                         {
-                            data: 'kode_produk'
+                            data: 'id'
                         },
                         {
-                            data: 'nama_produk'
+                            data: 'nama'
                         },
                         {
                             data: 'harga_jual'
@@ -263,15 +263,15 @@
         }
 
         function pilihProduk(id, kode) {
-            $('#id_produk').val(id);
-            $('#kode_produk').val(kode);
+            $('#id_produkjadi').val(id);
+            $('#id').val(kode);
             hideProduk();
             tambahProduk();
         }
 
         function tambahProduk() {
             // Mendapatkan ID produk dari input tersembunyi
-            let id_produk = $('#id_produk').val();
+            let id_produk = $('#id_produkjadi').val();
 
             // Mengirimkan permintaan AJAX untuk mendapatkan data stok produk
             $.get(`/produk/${id_produk}`)
