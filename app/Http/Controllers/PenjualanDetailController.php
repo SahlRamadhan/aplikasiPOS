@@ -21,7 +21,7 @@ class PenjualanDetailController extends Controller
             // Jika ada, ambil detail penjualan dan data pelanggan terkait
             $penjualan = Penjualan::find($id_penjualan);
             $pelangganSelected = $penjualan->pelanggan ?? new Pelanggan();
-            $produk = Produk::orderBy('nama')->get();
+            $produk = Produk::orderBy('id')->get();
             $pelanggan = Pelanggan::orderBy('nama_pelanggan')->get();
 
             // Tampilkan view dengan data yang diperlukan

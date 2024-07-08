@@ -20,7 +20,7 @@ class PenjualanController extends Controller
 
     public function data()
     {
-        $penjualan = Penjualan::with('pelanggan', 'user')->orderBy('id', 'desc')->get();
+        $penjualan = Penjualan::with('pelanggan', 'user')->orderBy('id', 'asc')->get();
 
         return datatables()
             ->of($penjualan)
@@ -129,7 +129,7 @@ class PenjualanController extends Controller
             ->addColumn('subtotal', function ($detail) {
                 return 'Rp. ' . format_uang($detail->subtotal);
             })
-            ->rawColumns(['kode_produk'])
+            ->rawColumns(['id'])
             ->make(true);
     }
 
