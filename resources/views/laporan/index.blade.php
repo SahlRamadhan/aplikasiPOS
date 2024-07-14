@@ -67,11 +67,6 @@
                 bPaginate: false,
             });
 
-            // $('.datepicker').datepicker({
-            //     format: 'yyyy-mm-dd',
-            //     autoclose: true
-            // });
-
             tableDetail = $('.table-detail').DataTable({
                 processing: true,
                 bSort: false,
@@ -115,7 +110,7 @@
                 window.location.href = '{{ route('laporan.index') }}' + '?tanggal_awal=' + tanggalAwal +
                     '&tanggal_akhir=' + tanggalAkhir + '&filter_type=tanggal';
             } else if (filterType === 'penjualan') {
-                var today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+                var today = new Date().toISOString().split('T')[0]; 
                 window.location.href = '{{ route('laporan.index') }}' + '?tanggal_awal=' + today +
                     '&tanggal_akhir=' + today + '&filter_type=penjualan';
             }
