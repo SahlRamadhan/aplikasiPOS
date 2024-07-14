@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthLogoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LaporanController;
@@ -30,8 +31,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
 
+    Route::post('logout', [AuthLogoutController::class, 'destroy'])->name('logout');
     //route untuk menuju menu Kategori
     Route::get('kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
     Route::resource('kategori', KategoriController::class);
