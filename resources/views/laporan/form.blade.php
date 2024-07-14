@@ -1,6 +1,6 @@
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="{{ route('laporan.index') }}" method="get" data-toggle="validator" class="form-horizontal">
+        <form id="filter-form" action="{{ route('laporan.index') }}" method="get" data-toggle="validator" class="form-horizontal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
@@ -22,6 +22,16 @@
                             <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control datepicker" required
                                 value="{{ request('tanggal_akhir') ?? date('Y-m-d') }}"
                                 style="border-radius: 0 !important;">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="filter_type" class="col-lg-2 col-lg-offset-1 control-label">Filter Type</label>
+                        <div class="">
+                            <select name="filter_type" id="filter_type" class="form-control" required>
+                                <option value="tanggal">Tanggal</option>
+                                <option value="penjualan">Penjualan Detail</option>
+                            </select>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

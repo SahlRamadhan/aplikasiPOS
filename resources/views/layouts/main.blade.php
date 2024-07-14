@@ -16,22 +16,22 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{{ asset('../node_modules/jqvmap/dist/jqvmap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('../node_modules/summernote/dist/summernote-bs4.css') }}">
-    <link rel="stylesheet" href="{{ asset('../node_modules/owl.carousel/dist/assets/owl.carousel.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('../node_modules/owl.carousel/dist/assets/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('node_modules/jqvmap/dist/jqvmap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('node_modules/summernote/dist/summernote-bs4.css') }}">
+    <link rel="stylesheet" href="{{ asset('node_modules/owl.carousel/dist/assets/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('node_modules/owl.carousel/dist/assets/owl.theme.default.min.css') }}">
 
     {{-- Data  Tables --}}
-    <link rel="stylesheet" href="{{ asset('../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('../node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css') }}">
+        href="{{ asset('node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css') }}">
 
     {{-- Modal --}}
     {{-- <link rel="stylesheet" href="{{ asset('../assets/modules/prism/prism.css') }}"> --}}
 
     <!-- Template CSS -->
-    <link rel="stylesheet" href="{{ asset('../assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('../assets/css/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
 
     @stack('css')
 
@@ -86,20 +86,20 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="{{ asset('../assets/js/stisla.js') }}"></script>
+    <script src="{{ asset('assets/js/stisla.js') }}"></script>
 
     <!-- JS Libraies -->
     {{-- <script src="{{ asset('../assets/modules/jquery.min.js') }}"></script> --}}
-    <script src="{{ asset('../node_modules/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
-    <script src="{{ asset('../node_modules/chart.js/dist/Chart.min.js') }}"></script>
-    <script src="{{ asset('../node_modules/owl.carousel/dist/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('../node_modules/summernote/dist/summernote-bs4.js') }}"></script>
-    <script src="{{ asset('../node_modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
+    <script src="{{ asset('node_modules/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('node_modules/chart.js/dist/Chart.min.js') }}"></script>
+    <script src="{{ asset('node_modules/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('node_modules/summernote/dist/summernote-bs4.js') }}"></script>
+    <script src="{{ asset('node_modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
 
     {{-- Data Tables --}}
-    <script src="{{ asset('../node_modules/datatables/media/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('../node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('../node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('node_modules/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script>
 
     {{-- swal Alert --}}
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -108,15 +108,15 @@
     {{-- <script src="{{ asset('../assets/modules/prism/prism.js') }}"></script> --}}
 
     <!-- Template JS File -->
-    <script src="{{ asset('../assets/js/scripts.js') }}"></script>
-    <script src="{{ asset('../assets/js/custom.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
 
     {{-- Validator --}}
-    <script src="{{ asset('../js/validator.min.js') }}"></script>
+    <script src="{{ asset('js/validator.min.js') }}"></script>
 
 
     <!-- Page Specific JS File -->
-    <script src="{{ asset('../assets/js/page/index.js') }}"></script>
+    <script src="{{ asset('assets/js/page/index.js') }}"></script>
     @stack('scripts')
 </body>
 

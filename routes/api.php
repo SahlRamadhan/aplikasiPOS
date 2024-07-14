@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiDataPenjualanController;
 use App\Http\Controllers\Api\PermintaanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::post('permintaan', [PermintaanController::class, 'store']);
 // Route::put('permintaan/{id}', [PermintaanController::class, 'update']);
 Route::apiResource('permintaan-produkjadi', PermintaanController::class);
+Route::apiResource('penjualan-Api', ApiDataPenjualanController::class);

@@ -47,7 +47,7 @@
                         sortable: false
                     },
                     {
-                        data: 'kode_kategori'
+                        data: 'id'
                     },
                     {
                         data: 'nama'

@@ -274,7 +274,7 @@
             let id_produk = $('#id_produkjadi').val();
 
             // Mengirimkan permintaan AJAX untuk mendapatkan data stok produk
-            $.get(`/produk/${id_produk}`)
+            $.get(`/aplikasi-penjualan/public/produk/${id_produk}`)
                 .done(response => {
                     // Memeriksa stok produk
                     if (response.stok <= 10) {

@@ -47,11 +47,28 @@ class PermintaanController extends Controller
             })
             ->addColumn('aksi', function ($permintaan) {
                 return '
+                <button type="button" onclick="editForm(`' . route('permintaan.update', $permintaan['id']) . '`)" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button>
                 <button type="button" onclick="deleteData(`' . route('permintaan.destroy', $permintaan['id']) . '`)" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>
             ';
             })
             ->rawColumns(['aksi', 'id_permintaan'])
             ->make(true);
+    }
+
+    public function show($id)
+    {
+        $client = new Client();
+        $url = 'http://127.0.0.1:8000/api/permintaan/' . $id;
+
+        $response = $client->request('GET', $url);
+        $content = $response->getBody()->getContents();
+        $data = json_decode($content, true);
+
+        if ($response->getStatusCode() == 200 && $data['status']) {
+            return response()->json($data['data']);
+        } else {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
     }
 
     public function store(Request $request)
@@ -80,6 +97,39 @@ class PermintaanController extends Controller
             return redirect()->back()->with('error', 'Gagal mengirim permintaan ke API')->withInput();
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        $client = new Client();
+        $url = 'http://127.0.0.1:8000/api/permintaan/' . $id;
+
+        $parameter = [
+            'id_produk_jadi' => $request->id_produk_jadi,
+            'jumlah' => $request->jumlah,
+            'nama' => $request->nama,
+            'status' => $request->status,
+        ];
+
+        try {
+            $response = $client->request('PUT', $url, [
+                'headers' => ['Content-Type' => 'application/json'],
+                'json' => $parameter
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $content = $response->getBody()->getContents();
+            $contentArray = json_decode($content, true);
+
+            if ($statusCode == 200 && $contentArray['status']) {
+                return redirect()->route('permintaan.index')->with('success', 'Data berhasil diperbarui');
+            } else {
+                return redirect()->back()->with('error', 'Gagal memperbarui data: ' . $contentArray['message']);
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
 
     public function destroy(string $id)
     {

@@ -59,8 +59,8 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        $produk = Produk::latest()->first() ?? new Produk();
-        $id =  $produk ? (int) substr($produk->id, 5) + 1 : 1;
+        $produk = Produk::latest()->first();
+        $id =  $produk ? (int) substr($produk->id, 3) + 1 : 1;
 
         $produk = new Produk();
         $produk->id = 'PJ-' . tambah_nol_didepan($id, 3);
@@ -79,6 +79,10 @@ class ProdukController extends Controller
     public function show(string $id)
     {
         $produk = Produk::find($id);
+
+        if (!$produk) {
+            return response()->json(['error' => 'Produk tidak ditemukan'], 404);
+        }
 
         return response()->json($produk);
     }

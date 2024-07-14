@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Penjualan;
+use App\Models\PenjualanDetail;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Http\Request;
@@ -16,13 +17,14 @@ class LaporanController extends Controller
     {
         $tanggalAwal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
         $tanggalAkhir = date('Y-m-d');
+        $filterType = $request->query('filter_type', 'tanggal');
 
         if ($request->has('tanggal_awal') && $request->tanggal_awal != "" && $request->has('tanggal_akhir') && $request->tanggal_akhir) {
             $tanggalAwal = $request->tanggal_awal;
             $tanggalAkhir = $request->tanggal_akhir;
         }
 
-        return view('laporan.index', compact('tanggalAwal', 'tanggalAkhir'));
+        return view('laporan.index', compact('tanggalAwal', 'tanggalAkhir', 'filterType'));
     }
 
     public function getData($awal, $akhir)
@@ -38,7 +40,6 @@ class LaporanController extends Controller
 
             $total_penjualan = Penjualan::where('created_at', 'LIKE', "%$tanggal%")->sum('bayar');
 
-
             $pendapatan = $total_penjualan;
             $total_pendapatan += $pendapatan;
 
@@ -47,6 +48,7 @@ class LaporanController extends Controller
             $row['tanggal'] = tanggal_indonesia($tanggal, false);
             $row['penjualan'] = format_uang($total_penjualan);
             $row['pendapatan'] = format_uang($pendapatan);
+            $row['aksi'] = '<button onclick="showDetail(`' . route('laporan.detail', $tanggal) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i> Show</button>';
 
             $data[] = $row;
         }
@@ -56,6 +58,7 @@ class LaporanController extends Controller
             'tanggal' => '',
             'penjualan' => '',
             'pendapatan' => format_uang($total_pendapatan),
+            'aksi' => '',
         ];
 
         return ['data' => $data, 'total_pendapatan' => $total_pendapatan];
@@ -68,35 +71,104 @@ class LaporanController extends Controller
 
         return datatables()
             ->of($data)
+            ->rawColumns(['aksi'])
             ->make(true);
     }
 
-    public function exportPDF($awal, $akhir)
+    public function exportPDF($awal, $akhir, Request $request)
     {
-        $dataInfo = $this->getData($awal, $akhir);
-        $data = $dataInfo['data'];
-        $total_pendapatan = $dataInfo['total_pendapatan'];
+        $filterType = $request->query('filter_type');
 
-        // Menginisialisasi Dompdf
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
+        if ($filterType == 'penjualan') {
+            $today = date('Y-m-d');
+            $details = PenjualanDetail::with('produk')
+            ->whereDate('created_at', $today)
+                ->get();
 
-        $dompdf = new Dompdf($options);
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
 
-        // Load view dengan data
-        $view = view('laporan.cetakPdf', compact('awal', 'akhir', 'data', 'total_pendapatan'))->render();
+            $dompdf = new Dompdf($options);
 
-        // Load konten HTML ke dompdf
-        $dompdf->loadHtml($view);
+            $view = view('laporan.cetakPdfDetail', compact('details'))->render();
+            $dompdf->loadHtml($view);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
 
-        // (Opsional) Set ukuran dan orientasi kertas
-        $dompdf->setPaper('A4', 'portrait');
+            return $dompdf->stream('Laporan-penjualan-detail-' . date('Y-m-d-His') . '.pdf');
+        } else {
+            $dataInfo = $this->getData($awal, $akhir);
+            $data = $dataInfo['data'];
+            $total_pendapatan = $dataInfo['total_pendapatan'];
 
-        // Render PDF
-        $dompdf->render();
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
 
-        // Mengirimkan file PDF ke browser untuk diunduh
-        return $dompdf->stream('Laporan-pendapatan-' . date('Y-m-d-His') . '.pdf');
+            $dompdf = new Dompdf($options);
+
+            $view = view('laporan.cetakPdf', compact('awal', 'akhir', 'data', 'total_pendapatan'))->render();
+            $dompdf->loadHtml($view);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            return $dompdf->stream('Laporan-pendapatan-' . date('Y-m-d-His') . '.pdf');
+        }
     }
+
+    public function detail($tanggal)
+    {
+        $detail = PenjualanDetail::with('produk')
+            ->whereDate('created_at', $tanggal)
+            ->get();
+
+        return datatables()
+            ->of($detail)
+            ->addIndexColumn()
+            ->addColumn('id', function ($detail) {
+                return $detail->produk->id;
+            })
+            ->addColumn('nama', function ($detail) {
+                return $detail->produk->nama;
+            })
+            ->addColumn('harga', function ($detail) {
+                return 'Rp. ' . format_uang($detail->harga_jual);
+            })
+            ->addColumn('jumlah', function ($detail) {
+                return $detail->jumlah;
+            })
+            ->addColumn('subtotal', function ($detail) {
+                return 'Rp. ' . format_uang($detail->subtotal);
+            })
+            ->make(true);
+    }
+
+    public function filterPenjualan(Request $request)
+    {
+        $tanggalAwal = $request->tanggal_awal;
+        $tanggalAkhir = $request->tanggal_akhir;
+
+        // Ambil data penjualan detail berdasarkan tanggal
+        $penjualanDetails = PenjualanDetail::with('produk')
+            ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
+            ->get();
+
+        // Format data untuk DataTables
+        $data = [];
+        foreach ($penjualanDetails as $index => $detail) {
+            $row = [
+                'DT_RowIndex' => $index + 1,
+                'id' => $detail->produk->id,
+                'nama' => $detail->produk->nama,
+                'harga' => 'Rp. ' . format_uang($detail->harga_jual),
+                'jumlah' => $detail->jumlah,
+                'subtotal' => 'Rp. ' . format_uang($detail->subtotal),
+            ];
+            $data[] = $row;
+        }
+
+        return response()->json(['data' => $data]);
+    }
+
 }

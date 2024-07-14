@@ -70,7 +70,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     //route untuk menuju menu laporan
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('laporan/detail/{tanggal}', [LaporanController::class, 'detail'])->name('laporan.detail');
     Route::get('laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
+    Route::get('laporan/filter-penjualan', [LaporanController::class, 'filterPenjualan'])->name('laporan.filter_penjualan');
     Route::get('laporan/cetak-pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
     Route::resource('laporan', LaporanController::class);
 });

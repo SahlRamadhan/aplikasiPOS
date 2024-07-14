@@ -25,9 +25,6 @@ class KategoriController extends Controller
         return datatables()
             ->of($kategori)
             ->addIndexColumn()
-            ->addColumn('kode_kategori', function ($kategori) {
-                return '<span class="badge badge-success">' . $kategori->kode_kategori . '<span>';
-            })
             ->addColumn('aksi', function ($kategori) {
                 return '
                     <button type="button" onclick="editForm(`' . route('kategori.update', $kategori->id) . '`)" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button>
@@ -41,14 +38,35 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $kategori = Kategori::latest()->first() ?? new Kategori();
-        $kode_kategori =  $kategori ? (int) substr($kategori->kode_kategori, 5) + 1 : 1;
 
         $kategori = new Kategori();
-        $kategori->kode_kategori = 'KTG-' . tambah_nol_didepan($kode_kategori, 3);
+        $kategori->id = $request->id;
         $kategori->nama = $request->nama;
         $kategori->keterangan = $request->keterangan;
         $kategori->save();
 
         return response()->json('Data berhasil disimpan', 200);
+    }
+    public function show(string $id)
+    {
+        $kategori = Kategori::find($id);
+
+        return response()->json($kategori);
+    }
+    public function update(Request $request, string $id)
+    {
+        $kategori = Kategori::find($id);
+        $kategori->update($request->all());
+
+        return response()->json('Data berhasil disimpan', 200);
+    }
+
+
+    public function destroy(string $id)
+    {
+        $kategori = Kategori::find($id);
+        $kategori->delete();
+
+        return response(null, 204);
     }
 }

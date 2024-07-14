@@ -106,6 +106,29 @@
 
       
         }
+
+        function editForm(url) {
+            $('#modalForm').modal('show');
+            $('#modalForm .modal-title').text('Edit Permintaan');
+
+            $('#modalForm form')[0].reset();
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('put');
+            $('#modalForm [name=nama]').focus();
+
+            $.get(url)
+                .done((response) => {
+                    $('#modalForm [name=nama]').val(response.nama);
+                    $('#modalForm [name=jumlah]').val(response.jumlah);
+                    $('#modalForm [name=status]').val(response.status);
+                    $('#modalForm [name=id_produk_jadi]').val(response.id_produk_jadi);
+
+                })
+                .fail((errors) => {
+                    Swal.fire("Oops!", "Tidak dapat menampilkan data!!", "error");
+                    return;
+                });
+        }
         function deleteData(url) {
             // Menggantikan perintah confirm dengan SweetAlert
             Swal.fire({
