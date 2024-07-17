@@ -1,42 +1,56 @@
-<!-- resources/views/laporan/cetakDetailPdf.blade.php -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Laporan Penjualan Detail</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        /* Gaya CSS untuk tampilan PDF */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
-    <h2>Laporan Penjualan Detail</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Kode Produk</th>
-                <th>Nama Produk</th>
-                <th>Harga</th>
-                <th>Jumlah</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($details as $detail)
+    <h1>Laporan Detail Penjualan</h1>
+    <p>Periode: {{ tanggal_indonesia($awal, false) }} - {{ tanggal_indonesia($akhir, false) }}</p>
+    @if($details->isEmpty())
+        <p>Tidak ada data penjualan dalam rentang tanggal yang dipilih.</p>
+    @else
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $detail->produk->id }}</td>
-                    <td>{{ $detail->produk->nama }}</td>
-                    <td>{{ 'Rp. ' . format_uang($detail->harga_jual) }}</td>
-                    <td>{{ $detail->jumlah }}</td>
-                    <td>{{ 'Rp. ' . format_uang($detail->subtotal) }}</td>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Subtotal</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($details as $index => $detail)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ tanggal_indonesia($detail->created_at->format('Y-m-d'), false) }}</td>
+                        <td>{{ $detail->produk->nama }}</td>
+                        <td>Rp. {{ number_format($detail->harga_jual, 0, ',', '.') }}</td>
+                        <td>{{ $detail->jumlah }}</td>
+                        <td>Rp. {{ number_format($detail->subtotal, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 </body>
 </html>

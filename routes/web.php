@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiNativeHrdController;
 use App\Http\Controllers\Auth\AuthLogoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
@@ -73,8 +74,13 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     //route untuk menuju menu laporan
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('laporan/detail/{tanggal}', [LaporanController::class, 'detail'])->name('laporan.detail');
-    Route::get('laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
+    Route::get('laporan/data/{awal}/{akhir}/{filterType}', [LaporanController::class, 'data'])->name('laporan.data');
     Route::get('laporan/filter-penjualan', [LaporanController::class, 'filterPenjualan'])->name('laporan.filter_penjualan');
     Route::get('laporan/cetak-pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
     Route::resource('laporan', LaporanController::class);
+
+    Route::get('/api_native_hrd', [ApiNativeHrdController::class, 'index'])->name('api_native_hrd.index');
+    Route::post('/api_native_hrd', [ApiNativeHrdController::class, 'store'])->name('api_native_hrd.store');
+    Route::put('/api_native_hrd/{id}', [ApiNativeHrdController::class, 'update'])->name('api_native_hrd.update');
+    Route::delete('/api_native_hrd/{id}', [ApiNativeHrdController::class, 'destroy'])->name('api_native_hrd.destroy');
 });

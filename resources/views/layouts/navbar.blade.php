@@ -24,7 +24,8 @@
                      <i class="fas fa-cog"></i> Settings
                  </a>
                  <div class="dropdown-divider"></div>
-                 <a href="#" class="dropdown-item has-icon text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                 <a href="#" class="dropdown-item has-icon text-danger"
+                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                      <i class="fas fa-sign-out-alt"></i> Logout
                  </a>
              </div>
@@ -63,6 +64,9 @@
              <li class="menu-header">Report </li>
              <li class="{{ Request::is('laporan') ? 'active' : '' }}"><a class="nav-link"
                      href="{{ route('laporan.index') }}"><i class="fas fa-file-pdf"></i><span>Laporan</span></a></li>
+             <li class="menu-header">Data HRD </li>
+             <li class="{{ Request::is('api_native_hrd') ? 'active' : '' }}"><a class="nav-link"
+                     href="{{ route('api_native_hrd.index') }}"><i class="fas fa-file-pdf"></i><span>Data Karyawan</span></a></li>
          </ul>
      </aside>
  </div>

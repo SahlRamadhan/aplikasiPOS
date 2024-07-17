@@ -9,8 +9,11 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Ubah Periode</button>
-                <a href="{{ route('laporan.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}?filter_type={{ request('filter_type') }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-excel-o"></i> Export PDF</a>
+                    <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
+                        Ubah Periode</button>
+                    <a href="{{ route('laporan.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}?filter_type={{ request('filter_type') }}"
+                        target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-excel-o"></i> Export
+                        PDF</a>
                 </div>
                 <div class="box-body table-responsive">
                     <table class="table table-stiped table-bordered table-laporan">
@@ -21,6 +24,14 @@
                             <th>Pendapatan</th>
                             <th width="15%">Aksi</th>
                         </thead>
+                        <tfoot class="total-pendapatan">
+                            <tr>
+                                <td></td>
+                                <td><h5>Total Pendapatan</h5></td>
+                                <td></td>
+                                <td>{{ format_uang($total_pendapatan) }}</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -40,7 +51,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route('laporan.data', [$tanggalAwal, $tanggalAkhir]) }}',
+                    url: '{{ route('laporan.data', [$tanggalAwal, $tanggalAkhir, $filterType]) }}',
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -100,6 +111,14 @@
             $('#modal-form .modal-title').text('Periode Laporan');
         }
 
+        $('#filter_type').on('change', function() {
+            if ($(this).val() === 'penjualan') {
+                $('#tanggal-range').hide();
+            } else {
+                $('#tanggal-range').show();
+            }
+        });
+
         $('#filter-form').on('submit', function(e) {
             e.preventDefault();
             var filterType = $('#filter_type').val();
@@ -110,13 +129,10 @@
                 window.location.href = '{{ route('laporan.index') }}' + '?tanggal_awal=' + tanggalAwal +
                     '&tanggal_akhir=' + tanggalAkhir + '&filter_type=tanggal';
             } else if (filterType === 'penjualan') {
-                var today = new Date().toISOString().split('T')[0]; 
-                window.location.href = '{{ route('laporan.index') }}' + '?tanggal_awal=' + today +
-                    '&tanggal_akhir=' + today + '&filter_type=penjualan';
+                window.location.href = '{{ route('laporan.index') }}' + '?tanggal_awal=' + tanggalAwal +
+                    '&tanggal_akhir=' + tanggalAkhir + '&filter_type=penjualan';
             }
         });
-
-
 
         function showDetail(url) {
             $('#modal-detail').modal('show');
