@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class ApiNativeHrdController extends Controller
 {
-    private $apiUrl = 'http://localhost/api-hrd/';
+    private $apiUrl = 'http://192.168.131.143/api-hrd/';
 
     public function index()
     {

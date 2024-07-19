@@ -64,9 +64,9 @@
              <li class="menu-header">Report </li>
              <li class="{{ Request::is('laporan') ? 'active' : '' }}"><a class="nav-link"
                      href="{{ route('laporan.index') }}"><i class="fas fa-file-pdf"></i><span>Laporan</span></a></li>
-             <li class="menu-header">Data HRD </li>
+             {{-- <li class="menu-header">Data HRD </li>
              <li class="{{ Request::is('api_native_hrd') ? 'active' : '' }}"><a class="nav-link"
-                     href="{{ route('api_native_hrd.index') }}"><i class="fas fa-file-pdf"></i><span>Data Karyawan</span></a></li>
+                     href="{{ route('api_native_hrd.index') }}"><i class="fas fa-file-pdf"></i><span>Data Karyawan</span></a></li> --}}
          </ul>
      </aside>
  </div>

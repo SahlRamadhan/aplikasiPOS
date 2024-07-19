@@ -27,7 +27,9 @@
                         <tfoot class="total-pendapatan">
                             <tr>
                                 <td></td>
-                                <td><h5>Total Pendapatan</h5></td>
+                                <td>
+                                    <h4>Total Pendapatan</h4>
+                                </td>
                                 <td></td>
                                 <td>{{ format_uang($total_pendapatan) }}</td>
                             </tr>
