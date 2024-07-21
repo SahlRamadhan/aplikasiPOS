@@ -71,8 +71,8 @@ class LaporanController extends Controller
         } elseif ($filterType == 'penjualan') {
             // Logika untuk filter berdasarkan penjualan detail
             $transaksis = Penjualan::whereBetween('created_at', [$awal . ' 00:00:00', $akhir . ' 23:59:59'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+                ->orderBy('created_at', 'asc')
+                ->get();
 
             foreach ($transaksis as $transaksi) {
                 $tanggal = $transaksi->created_at->format('Y-m-d');
@@ -121,11 +121,11 @@ class LaporanController extends Controller
     public function exportPDF($awal, $akhir, Request $request)
     {
         $filterType = $request->query('filter_type');
-
+        $user = auth()->user();
         if ($filterType == 'penjualan') {
-            $details = PenjualanDetail::with('produk')
-            ->whereBetween('created_at', [$awal . ' 00:00:00', $akhir . ' 23:59:59'])
-            ->get();
+            $details = Penjualan::with('pelanggan')->whereBetween('created_at', [$awal . ' 00:00:00', $akhir . ' 23:59:59'])
+                ->orderBy('created_at', 'asc')
+                ->get();
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);
@@ -133,13 +133,13 @@ class LaporanController extends Controller
 
             $dompdf = new Dompdf($options);
 
-            $view = view('laporan.cetakPdfDetail', compact('details', 'awal', 'akhir'))->render();
+            $view = view('laporan.cetakPdfDetail', compact('details', 'awal', 'akhir', 'user'))->render();
 
             $dompdf->loadHtml($view);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
 
-            return $dompdf->stream('Laporan-penjualan-detail-' . date('Y-m-d-His') . '.pdf');
+            return $dompdf->stream('Laporan-penjualan-' . date('Y-m-d-His') . '.pdf');
         } else {
             $dataInfo = $this->getData($awal, $akhir, $filterType);
             $data = $dataInfo['data'];
@@ -151,7 +151,7 @@ class LaporanController extends Controller
 
             $dompdf = new Dompdf($options);
 
-            $view = view('laporan.cetakPdf', compact('awal', 'akhir', 'data', 'total_pendapatan'))->render();
+            $view = view('laporan.cetakPdf', compact('awal', 'akhir', 'data', 'total_pendapatan', 'user'))->render();
             $dompdf->loadHtml($view);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
@@ -194,7 +194,7 @@ class LaporanController extends Controller
 
         // Ambil data penjualan detail berdasarkan tanggal
         $penjualanDetails = PenjualanDetail::with('produk')
-            ->whereBetween('created_at',[$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
+            ->whereBetween('created_at', [$tanggalAwal . ' 00:00:00', $tanggalAkhir . ' 23:59:59'])
             ->get();
 
         // Format data untuk DataTables
@@ -213,5 +213,4 @@ class LaporanController extends Controller
 
         return response()->json(['data' => $data]);
     }
-
 }

@@ -59,11 +59,23 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
+        // Ambil ID terakhir dari tabel produk_jadi
         $produk = Produk::latest()->first();
-        $id =  $produk ? (int) substr($produk->id, 3) + 1 : 1;
+        $lastIdNumber = $produk ? (int) substr($produk->id, 3) : 0;
 
+        // Tambahkan 1 pada ID terakhir untuk membuat ID baru
+        $newIdNumber = $lastIdNumber + 1;
+        $newId = 'PJ-' . str_pad($newIdNumber, 3, '0', STR_PAD_LEFT);
+
+        // Cek apakah ID baru sudah ada di tabel
+        while (Produk::find($newId)) {
+            $newIdNumber++;
+            $newId = 'PJ-' . str_pad($newIdNumber, 3, '0', STR_PAD_LEFT);
+        }
+
+        // Simpan produk baru dengan ID baru yang unik
         $produk = new Produk();
-        $produk->id = 'PJ-' . tambah_nol_didepan($id, 3);
+        $produk->id = $newId;
         $produk->nama = $request->nama;
         $produk->id_kategori = $request->id_kategori;
         $produk->harga = $request->harga;
