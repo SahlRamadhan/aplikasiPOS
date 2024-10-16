@@ -10,7 +10,7 @@ class PermintaanController extends Controller
     public function index()
     {
         $client = new Client();
-        $url = 'http://192.168.131.7/muza_mebel_inventory/public/api/permintaan';
+        $url = 'https://muzamebelinventory.biz.id/api/permintaan';
         $response = $client->request('GET', $url);
         $content = $response->getBody()->getContents();
         $data = json_decode($content, true)['data'];
@@ -27,13 +27,13 @@ class PermintaanController extends Controller
     public function data()
     {
         $client = new \GuzzleHttp\Client();
-        $url = 'http://192.168.131.7/muza_mebel_inventory/public/api/permintaan';
+        $url = 'https://muzamebelinventory.biz.id/api/permintaan';
 
         $response = $client->request('GET', $url);
         $content = $response->getBody()->getContents();
         $permintaanData = json_decode($content, true)['data'];
 
-        
+
 
         $permintaan = collect($permintaanData);
         return datatables()
@@ -58,7 +58,7 @@ class PermintaanController extends Controller
     public function show($id)
     {
         $client = new Client();
-        $url = 'http://192.168.131.7/muza_mebel_inventory/public/api/permintaan/' . $id;
+        $url = 'https://muzamebelinventory.biz.id/api/permintaan/' . $id;
 
         $response = $client->request('GET', $url);
         $content = $response->getBody()->getContents();
@@ -74,7 +74,7 @@ class PermintaanController extends Controller
     public function store(Request $request)
     {
         $client = new Client();
-        $url = 'http://192.168.131.7/muza_mebel_inventory/public/api/permintaan';
+        $url = 'https://muzamebelinventory.biz.id/api/permintaan';
         $parameter = [
             'nama' => $request->nama,
             'jumlah' => $request->jumlah,
@@ -101,7 +101,7 @@ class PermintaanController extends Controller
     public function update(Request $request, $id)
     {
         $client = new Client();
-        $url = 'http://192.168.131.7/muza_mebel_inventory/public/api/permintaan/' . $id;
+        $url = 'https://muzamebelinventory.biz.id/api/permintaan/' . $id;
 
         $parameter = [
             'id_produk_jadi' => $request->id_produk_jadi,
@@ -134,7 +134,7 @@ class PermintaanController extends Controller
     public function destroy(string $id)
     {
         $client = new Client();
-        $url = 'http://192.168.131.7/muza_mebel_inventory/public/api/permintaan/' . $id;
+        $url = 'https://muzamebelinventory.biz.id/api/permintaan/' . $id;
 
         $response = $client->request('DELETE', $url);
 
